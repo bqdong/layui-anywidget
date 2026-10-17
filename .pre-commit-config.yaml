@@ -1,0 +1,47 @@
+# prek / pre-commit hooks. Install with `uv run prek install` (or `just setup`).
+default_install_hook_types: [pre-commit]
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^layui_anywidget/static/(vendor|layui-bridge\.js)
+      - id: end-of-file-fixer
+        exclude: ^layui_anywidget/static/(vendor|layui-bridge\.js)
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+
+  # Run the project's ruff via uv so versions match `just lint`.
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+        pass_filenames: true
+
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types_or: [python, pyi]
+        pass_filenames: true
+
+      # Generated file: regenerate rather than edit by hand.
+      - id: bridge-build-check
+        name: layui bridge is up to date
+        entry: node scripts/build-bridge.mjs --check
+        language: system
+        files: ^(layui_anywidget/static/src/|layui_anywidget/static/layui-anywidget\.css|layui_anywidget/static/vendor/|scripts/build-bridge\.mjs)
+        pass_filenames: false
+
+      - id: pytest
+        name: pytest
+        entry: uv run pytest -q
+        language: system
+        types: [python]
+        pass_filenames: false

@@ -1,0 +1,132 @@
+/* Widget-level layout.  layui's own stylesheet is injected by the bridge
+   (into the document and, when the widget lives in a shadow root, into that
+   root as well), so nothing here may contain global resets. */
+
+.law-root {
+  --law-gap: 12px;
+  --law-muted: #5f6368;
+  --law-border: #e5e7eb;
+  --law-surface: #ffffff;
+  --law-text: inherit;
+  color: var(--law-text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.law-root *,
+.law-root *::before,
+.law-root *::after {
+  box-sizing: border-box;
+}
+
+.law-root .law-field {
+  display: flex;
+  align-items: center;
+  gap: var(--law-gap);
+  margin-bottom: var(--law-gap);
+}
+
+.law-root .law-field-stacked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.law-root .law-field > .law-label {
+  flex: 0 0 auto;
+  min-width: 80px;
+  color: var(--law-muted);
+  text-align: right;
+}
+
+.law-root .law-field-stacked > .law-label {
+  text-align: left;
+}
+
+.law-root .law-field-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.law-root .law-status {
+  padding: 16px;
+  color: var(--law-muted);
+  font-size: 13px;
+}
+
+.law-root .law-status-error {
+  color: #c0392b;
+  background: #fdf3f2;
+  border: 1px solid #f5c6c0;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+.law-root .law-node {
+  width: 100%;
+}
+
+.law-root .law-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.law-root .law-table th,
+.law-root .law-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--law-border);
+  text-align: left;
+}
+
+.law-root .law-table th {
+  font-weight: 600;
+  color: var(--law-muted);
+}
+
+/* Dark theme: layui 2.13 has no dark mode, so only the widget chrome and the
+   most common surfaces are adjusted. */
+.law-root[data-theme="dark"] {
+  --law-muted: #9aa0a6;
+  --law-border: #3c4043;
+  --law-surface: #202124;
+  color: #e8eaed;
+  color-scheme: dark;
+}
+
+.law-root[data-theme="dark"] .layui-input,
+.law-root[data-theme="dark"] .layui-textarea,
+.law-root[data-theme="dark"] .layui-form-select .layui-input,
+.law-root[data-theme="dark"] .layui-table,
+.law-root[data-theme="dark"] .layui-tab-title li {
+  background-color: #202124;
+  border-color: #3c4043;
+  color: #e8eaed;
+}
+
+.law-root[data-theme="dark"] .layui-form-select dl {
+  background-color: #202124;
+  border-color: #3c4043;
+  color: #e8eaed;
+}
+
+.law-root[data-theme="dark"] .layui-form-select dl dd.layui-this {
+  background-color: #16baaa;
+  color: #fff;
+}
+
+.law-root[data-theme="dark"] .layui-table td,
+.law-root[data-theme="dark"] .layui-table th {
+  border-color: #3c4043;
+}
+
+.law-root[data-theme="dark"] .layui-table-view {
+  border-color: #3c4043;
+}
+
+.law-root[data-theme="dark"] .layui-tabs-header,
+.law-root[data-theme="dark"] .layui-tab-title {
+  border-color: #3c4043;
+}

@@ -1,0 +1,11 @@
+{
+  "name": "layui-anywidget-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-layui.mjs",
+    "build": "node scripts/build-bridge.mjs",
+    "test": "node --test tests/js/*.test.mjs",
+    "serve": "python3 -m http.server 8000"
+  }
+}

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>layui-anywidget preview</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 860px;
+        margin: 24px auto;
+        padding: 0 16px;
+        line-height: 1.6;
+      }
+      h1 { font-size: 18px; }
+      .panel {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      .log {
+        font-family: ui-monospace, monospace;
+        font-size: 12px;
+        background: #f8fafc;
+        border-radius: 6px;
+        padding: 8px;
+        max-height: 160px;
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>layui-anywidget preview</h1>
+    <p>This page emulates the anywidget host (model proxy + render contract).</p>
+
+    <div class="panel" id="light-host"></div>
+    <div class="panel" id="shadow-host"></div>
+    <div class="panel" id="standalone-host"></div>
+    <div class="panel"><label>事件日志</label><div class="log" id="log"></div></div>
+
+    <script type="module">
+      import widget from "../layui_anywidget/static/layui-bridge.js";
+
+      const logEl = document.getElementById("log");
+      const log = (...args) => {
+        logEl.textContent += args.map((a) => JSON.stringify(a, null, 0)).join(" ") + "\n";
+        logEl.scrollTop = logEl.scrollHeight;
+      };
+
+      function makeModel(state, schema, extra = {}) {
+        const data = { state, schema, event: {}, theme: "light", height: "auto", ready: false, error: "", sync_throttle_ms: 100, loading_text: "Loading…", config: {}, ...extra };
+        const listeners = {};
+        const notify = (key) => {
+          if (key === "state") {
+            for (const handler of listeners.state || []) handler();
+          }
+          for (const handler of listeners[`change:${key}`] || []) handler();
+        };
+        return {
+          get: (key) => data[key],
+          // Mirrors ipywidgets: a set notifies change:<trait> listeners.
+          set: (key, value) => {
+            data[key] = value;
+            notify(key);
+          },
+          save_changes: () => {},
+          send: () => {},
+          on: (name, callback) => {
+            (listeners[name] = listeners[name] || []).push(callback);
+            if (name === "change:state") listeners.state = listeners[name];
+          },
+          off: (name, callback) => {
+            listeners[name] = (listeners[name] || []).filter((fn) => fn !== callback);
+          },
+          widget_manager: null,
+          __data: data,
+        };
+      }
+
+      const schema = [
+        {
+          type: "form",
+          class: "layui-form",
+          children: [
+            { type: "field", props: { label: "姓名" }, children: [{ type: "input", id: "name", model: "name" }] },
+            {
+              type: "field",
+              props: { label: "语言" },
+              children: [
+                {
+                  type: "select",
+                  id: "lang",
+                  model: "lang",
+                  props: {
+                    options: [
+                      { label: "Python", value: "Python" },
+                      { label: "JavaScript", value: "JavaScript" },
+                      { label: "Rust", value: "Rust" },
+                    ],
+                  },
+                },
+              ],
+            },
+            { type: "field", props: { label: "等级" }, children: [{ type: "slider", id: "level", model: "level", props: { min_value: 0, max_value: 10, step: 1 } }] },
+            { type: "field", props: { label: "订阅" }, children: [{ type: "switch", id: "subscribe", model: "subscribe" }] },
+            { type: "field", props: { label: "颜色" }, children: [{ type: "colorpicker", id: "color", model: "color", props: { format: "hex" } }] },
+            { type: "field", props: { label: "日期" }, children: [{ type: "datepicker", id: "date", model: "date" }] },
+            { type: "field", props: { label: "评分" }, children: [{ type: "rate", id: "score", model: "score", props: { max_value: 5 } }] },
+            { type: "button", id: "submit", class: "layui-btn", events: { click: "click" }, children: ["提交"] },
+          ],
+        },
+        {
+          type: "table",
+          id: "rows",
+          bind: { data: "rows" },
+          events: { checkbox: "checkbox", tool: "tool" },
+          props: {
+            cols: [
+              [{ type: "checkbox", fixed: "left" }, { field: "name", title: "姓名" }, { field: "score", title: "分数", sort: true }],
+            ],
+          },
+        },
+      ];
+
+      const state = {
+        name: "Ada",
+        lang: "Python",
+        level: 6,
+        subscribe: true,
+        color: "#16baaa",
+        date: "2026-10-17",
+        score: 3,
+        rows: [
+          { name: "Ada", score: 98 },
+          { name: "Grace", score: 95 },
+        ],
+        selection: [],
+      };
+
+      const model = makeModel(state, schema);
+      model.on("change:event", () => log(model.get("event")));
+      model.on("change:ready", () => {
+        log({ ready: model.get("ready"), error: model.get("error") });
+        if (model.get("ready")) log({ state: model.get("state") });
+      });
+
+      const render = widget.render ?? widget.default?.render;
+      await render({ model, el: document.getElementById("light-host") });
+
+      // Same widget inside an open shadow root, mirroring marimo's host.
+      const shadowHost = document.getElementById("shadow-host");
+      const root = shadowHost.attachShadow({ mode: "open" });
+      const mount = document.createElement("div");
+      root.appendChild(mount);
+      const model2 = makeModel({ ...state }, schema);
+      await render({ model: model2, el: mount });
+      log({ shadow: root instanceof ShadowRoot, shadowBaseStyles: root.querySelectorAll('style[data-layui-anywidget="base"]').length });
+
+      // Standalone controls (one control per widget, as the Python control
+      // classes do). layui must hide the native control and show only its
+      // decorated UI.
+      const standalone = [
+        {
+          type: "select",
+          id: "lang",
+          model: "lang",
+          props: { options: ["Python", "JavaScript", "Rust"] },
+        },
+        { type: "radio", id: "plan", model: "plan", props: { options: ["free", "pro", "team"] } },
+        { type: "checkbox", id: "accept", model: "accept", props: { title: "I accept" } },
+      ];
+      const model3 = makeModel({ lang: "Python", plan: "free", accept: true }, standalone);
+      await render({ model: model3, el: document.getElementById("standalone-host") });
+    </script>
+  </body>
+</html>
