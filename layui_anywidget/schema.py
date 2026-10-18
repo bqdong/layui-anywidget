@@ -709,6 +709,62 @@ def carousel(
     return node("carousel", *items, model=model, props=props)
 
 
+def layer(
+    content: Any,
+    *,
+    id: str | None = None,
+    trigger: Any = "打开",
+    kind: str = "dialog",
+    title: str | bool | None = None,
+    type: int = 0,
+    options: Mapping[str, Any] | None = None,
+    events: Mapping[str, str] | Sequence[str] | str | None = None,
+    class_: str | Sequence[str] | None = None,
+    **props: Any,
+) -> Node:
+    """Build a ``layer`` popup opened by a trigger button.
+
+    layui's ``layer`` is a JS-only API rather than a renderable component, so
+    this node renders a button and opens the popup on click.
+
+    Args:
+        content: Popup body (text or HTML); for ``iframe`` the URL.
+        trigger: Trigger label (or a node to use as the trigger).
+        kind: ``"dialog"`` (``layer.open``), ``"alert"``, ``"confirm"``,
+            ``"msg"``, ``"tips"``, ``"load"``, ``"prompt"``, or ``"iframe"``.
+        title: Popup title; ``False`` hides the title bar.
+        type: layui layer type for ``dialog`` (0 dialog, 1 page, 3 loading,
+            4 tips).
+        options: Raw layui options merged last, e.g. ``{"area": ["420px", "240px"]}``.
+    """
+
+    kind = str(kind).lower()
+    if kind not in LAYER_KINDS:
+        raise ValueError(f"kind must be one of {sorted(LAYER_KINDS)}, got {kind!r}")
+    trigger_node = (
+        trigger
+        if isinstance(trigger, dict)
+        else node("span", trigger, class_="layui-btn layui-btn-primary")
+    )
+    layer_props: dict[str, Any] = {"kind": kind, "content": content, "type": type}
+    if title is not None:
+        layer_props["title"] = title
+    layer_props.update(props)
+    if options:
+        layer_props["options"] = dict(options)
+    return node(
+        "layer",
+        trigger_node,
+        id=id,
+        class_=class_,
+        events=events,
+        props=layer_props,
+    )
+
+
+LAYER_KINDS = frozenset({"dialog", "alert", "confirm", "msg", "tips", "load", "prompt", "iframe"})
+
+
 def laypage(total: int, *, page_key: str | None = None, limit: int = 10, **props: Any) -> Node:
     bind = {"curr": page_key} if page_key else None
     return node(
@@ -835,6 +891,7 @@ __all__ = [
     "hr",
     "input",
     "input_number",
+    "layer",
     "laypage",
     "menu",
     "node",

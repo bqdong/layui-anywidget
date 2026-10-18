@@ -85,9 +85,14 @@ Available helpers include `lay.form`, `lay.field`, `lay.input`,
 `lay.input_number`, `lay.textarea`, `lay.select`, `lay.checkbox`,
 `lay.switch`, `lay.radio`, `lay.slider`, `lay.colorpicker`,
 `lay.datepicker`, `lay.rate`, `lay.table`, `lay.tabs`, `lay.tab`,
-`lay.collapse`, `lay.dropdown`, `lay.menu`, `lay.breadcrumb`,
+`lay.collapse`, `lay.dropdown`, `lay.layer`, `lay.menu`, `lay.breadcrumb`,
 `lay.progress`, `lay.carousel`, `lay.laypage`, `lay.button`, `lay.row`,
 `lay.col`, `lay.div`, `lay.text`, `lay.title`, and `lay.node`.
+
+`lay.layer` renders a trigger button and opens a layui popup on click:
+`kind` is one of `dialog` / `alert` / `confirm` / `msg` / `load` / `tips` /
+`prompt` / `iframe`, `options` passes raw layui options, and `confirm` /
+`cancel` / prompt results are forwarded as events.
 
 ## State and events
 

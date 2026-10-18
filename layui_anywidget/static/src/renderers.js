@@ -440,6 +440,142 @@ function renderDropdown(api) {
   return { el: holder, destroy() { instance?.close?.(); } };
 }
 
+// --- layer ----------------------------------------------------------------
+
+// `layer` is a JS-only API: the node renders a trigger button that opens the
+// popup. layer appends the popup to document.body, so the document-level
+// "core" stylesheet (reset-free layui CSS) covers it in both hosts.
+function renderLayer(api) {
+  const { node, session, layui } = api;
+  const props = { ...(node.props || {}) };
+  const layer = layui.layer;
+  const holder = document.createElement("span");
+  holder.className = "law-inline";
+  let trigger = api.renderNode ? api.renderNode((node.children || [])[0]) : null;
+  if (!trigger) {
+    trigger = document.createElement("span");
+    trigger.className = "layui-btn layui-btn-primary";
+    trigger.textContent = props.trigger || "打开";
+  }
+  holder.appendChild(trigger);
+  // Layers live in document.body; remember them so teardown can close them.
+  const indexes = new Set();
+
+  // `value` is the confirm/cancel result (or the prompt input); `extra` adds
+  // the layer index for load layers.
+  const emit = (event, value, extra) => {
+    session.emit((node.events && node.events[event]) || event, node, value, extra || {});
+  };
+  // Options shared by every kind; per-kind options are layered on top.
+  const base = () => {
+    const options = { ...(props.options || {}) };
+    if (props.title !== undefined) options.title = props.title;
+    return options;
+  };
+  const content = props.content ?? "";
+
+  const open = () => {
+    const kind = String(props.kind || "dialog").toLowerCase();
+    const done = (value, eventName) => {
+      emit(eventName, value);
+      session.flush();
+    };
+    if (kind === "msg") {
+      const options = base();
+      // Show layui's success icon unless the caller picked one; keep the toast
+      // open long enough to be readable.
+      options.icon = options.icon ?? 1;
+      options.time = options.time ?? 3000;
+      options.end = () => emit("close", null);
+      indexes.add(layer.msg(content, options));
+      return;
+    }
+    if (kind === "confirm") {
+      indexes.add(
+        layer.confirm(
+          content,
+          base(),
+          (index) => {
+            layer.close(index);
+            done(true, "confirm");
+          },
+          (index) => {
+            layer.close(index);
+            done(false, "cancel");
+          },
+        ),
+      );
+      return;
+    }
+    if (kind === "alert") {
+      indexes.add(
+        layer.alert(content, base(), (index) => {
+          layer.close(index);
+          done(true, "confirm");
+        }),
+      );
+      return;
+    }
+    if (kind === "load") {
+      // A loading layer never closes on its own. `auto_close` (ms) lets the
+      // caller schedule it, since Python code cannot run inside the browser.
+      const options = base();
+      const autoClose = Number(options.auto_close ?? props.auto_close ?? 0);
+      delete options.auto_close;
+      const index = layer.load(Number(options.icon ?? 0), options);
+      indexes.add(index);
+      emit("open", index, { index });
+      session.flush();
+      if (autoClose > 0) setTimeout(() => layer.close(index), autoClose);
+      return;
+    }
+    if (kind === "tips") {
+      // A tips layer must not survive the widget being torn down.
+      indexes.add(layer.tips(content, trigger, base()));
+      return;
+    }
+    if (kind === "prompt") {
+      indexes.add(
+        layer.prompt(base(), (value, index) => {
+          layer.close(index);
+          done(value, "confirm");
+        }),
+      );
+      return;
+    }
+    const type = kind === "iframe" ? 2 : Number(props.type ?? 1) || 1;
+    indexes.add(
+      layer.open({
+        type,
+        content,
+        ...base(),
+        end: () => emit("close", null),
+      }),
+    );
+    emit("open", null);
+    session.flush();
+  };
+
+  trigger.addEventListener("click", (event) => {
+    event.preventDefault?.();
+    open();
+  });
+
+  return {
+    el: holder,
+    destroy() {
+      for (const index of indexes) {
+        try {
+          layer.close(index);
+        } catch {
+          /* the layer may already be closed */
+        }
+      }
+      indexes.clear();
+    },
+  };
+}
+
 // --- progress -------------------------------------------------------------
 
 function renderProgress(api) {
@@ -679,6 +815,7 @@ const COMPONENT_RENDERERS = {
   tabs: renderTabs,
   rate: renderRate,
   dropdown: renderDropdown,
+  layer: renderLayer,
   progress: renderProgress,
   collapse: renderCollapse,
   menu: renderMenu,

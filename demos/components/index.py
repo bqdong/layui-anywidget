@@ -26,7 +26,10 @@ def cell_index(mo):
         ("布局", ["layout"]),
         ("表单", ["input", "select", "checkbox", "radio", "switch", "form"]),
         ("展示", ["table", "laypage", "menu", "tabs", "collapse", "progress", "badge"]),
-        ("交互", ["dropdown", "datepicker", "colorpicker", "slider", "rate", "carousel"]),
+        (
+            "交互",
+            ["layer", "dropdown", "datepicker", "colorpicker", "slider", "rate", "carousel"],
+        ),
         ("按钮", ["button"]),
         ("其他", ["breadcrumb"]),
     ]

@@ -260,6 +260,21 @@ class TestDisplayHelpers:
         assert node["class"] == "layui-badge"
         assert node["props"]["lay-badge-color"] == "red"
 
+    def test_layer(self) -> None:
+        node = lay.layer("内容", kind="confirm", title="确认", events="confirm")
+        assert node["type"] == "layer"
+        assert node["props"]["kind"] == "confirm"
+        assert node["props"]["content"] == "内容"
+        assert node["props"]["title"] == "确认"
+        assert node["events"] == {"confirm": "confirm"}
+        assert node["children"][0]["class"] == "layui-btn layui-btn-primary"
+
+        raw = lay.layer("x", options={"area": ["420px", "240px"]})
+        assert raw["props"]["options"] == {"area": ["420px", "240px"]}
+
+        with pytest.raises(ValueError):
+            lay.layer("x", kind="nope")
+
     def test_layout(self) -> None:
         assert lay.row()["class"] == "layui-row"
         assert lay.row(gap=15)["class"] == "layui-row layui-col-space15"
