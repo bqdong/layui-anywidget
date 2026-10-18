@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install the environment
+        run: uv sync --locked
+
+      - name: Lint and format
+        run: |
+          uv run ruff format --check layui_anywidget tests
+          uv run ruff check layui_anywidget tests
+
+      - name: Check committed bridge is up to date
+        run: node scripts/build-bridge.mjs --check
+
+      - name: Unit tests
+        run: |
+          uv run pytest
+          node --test tests/js/*.test.mjs
+
+      - name: Browser smoke test
+        run: |
+          uv run playwright install --with-deps chromium
+          uv run python tests/browser_check.py
