@@ -131,6 +131,55 @@
   border-color: #3c4043;
 }
 
+/* Layer skins used by demos (and available to users): body-level popups, so
+   these live at the document root, not under `.law-root`. */
+.law-layer-custom .layui-layer-title {
+  background-color: #edeff2;
+}
+
+.law-layer-custom .layui-layer-btn {
+  padding: 5px 10px 10px;
+}
+
+.law-layer-custom .layui-layer-btn a {
+  background: #fff;
+  border-color: #e9e7e7;
+  color: #333;
+}
+
+.law-layer-custom .layui-layer-btn .layui-layer-btn0 {
+  border-color: #fa584d;
+  background-color: #fa584d;
+  color: #fff;
+}
+
+.law-layer-lockscreen {
+  background: url(https://unpkg.com/outeres@0.0.12/img/wallpaper/001.jpg) #16b777;
+  background-size: cover;
+  color: rgba(255, 255, 255, 1);
+}
+
+.law-layer-lockscreen .law-layer-pin {
+  width: 100%;
+  height: 38px;
+  padding: 0 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.law-layer-lockscreen .layui-input-suffix {
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0 3px 3px 0;
+}
+
+.law-layer-lockscreen .layui-input-suffix .layui-icon-right {
+  cursor: pointer;
+  color: #fff;
+}
+
 /* Native multiple select: layui applies single-line input styling. */
 .law-root select.law-multiselect {
   height: auto;

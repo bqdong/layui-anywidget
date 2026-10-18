@@ -91,8 +91,13 @@ Available helpers include `lay.form`, `lay.field`, `lay.input`,
 
 `lay.layer` renders a trigger button and opens a layui popup on click:
 `kind` is one of `dialog` / `alert` / `confirm` / `msg` / `load` / `tips` /
-`prompt` / `iframe`, `options` passes raw layui options, and `confirm` /
-`cancel` / prompt results are forwarded as events.
+`prompt` / `iframe` / `photos` / `tab`, and `options` passes raw layui
+options. Results reach Python as events (`confirm`, `cancel`, `prompt`,
+`button`, `close`, `unlock`, `submit`). Popups can chain the way the docs'
+examples do: `next=` / `next_cancel=` open a follow-up stage after an
+alert/confirm/prompt, `actions=["close_all", "reopen", "next"]` gives custom
+buttons behaviour, `tabs=[(title, node), ...]` opens real `layui-tabs`, and
+`unlock="111111"` implements the lock-screen example.
 
 ## State and events
 

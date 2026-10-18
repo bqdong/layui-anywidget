@@ -119,6 +119,10 @@ async function ensureRuntime(config, inDocument) {
   // DOM); in a shadow root the full CSS goes into the root while the document
   // gets just the reset-free core for layui's body-level popups.
   await Promise.all([loadCoreStyles(), inDocument ? loadFullStyles(document) : null]);
+  // Widget styles are reset-free and mostly `.law-root`-scoped, but layer
+  // skins (`.law-layer-*`) style the body-level popup, so they must also reach
+  // the document even when the widget itself lives in a shadow root.
+  loadWidgetStyles(document.head);
   const layui = await loadLayui();
   if (config && typeof config === "object" && Object.keys(config).length) {
     layui.config(config);

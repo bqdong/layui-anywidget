@@ -26,7 +26,7 @@ const LAYUI_CSS_CORE = ".layui-border-box,.layui-border-box *{box-sizing:border-
 // Our own layout/theme rules. Hosts inject `_css` into the document, which
 // misses shadow roots (marimo), so the bridge adds the same text to whichever
 // scope it renders into.
-const WIDGET_CSS = "/* Widget-level layout.  layui's own stylesheet is injected by the bridge\n   (into the document and, when the widget lives in a shadow root, into that\n   root as well), so nothing here may contain global resets. */\n\n.law-root {\n  --law-gap: 12px;\n  --law-muted: #5f6368;\n  --law-border: #e5e7eb;\n  --law-surface: #ffffff;\n  --law-text: inherit;\n  color: var(--law-text);\n  font-size: 14px;\n  line-height: 1.6;\n  min-width: 0;\n  box-sizing: border-box;\n}\n\n.law-root *,\n.law-root *::before,\n.law-root *::after {\n  box-sizing: border-box;\n}\n\n.law-root .law-field {\n  display: flex;\n  align-items: center;\n  gap: var(--law-gap);\n  margin-bottom: var(--law-gap);\n}\n\n.law-root .law-field-stacked {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 6px;\n}\n\n.law-root .law-field > .law-label {\n  flex: 0 0 auto;\n  min-width: 80px;\n  color: var(--law-muted);\n  text-align: right;\n}\n\n.law-root .law-field-stacked > .law-label {\n  text-align: left;\n}\n\n.law-root .law-field-body {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n\n.law-root .law-status {\n  padding: 16px;\n  color: var(--law-muted);\n  font-size: 13px;\n}\n\n.law-root .law-status-error {\n  color: #c0392b;\n  background: #fdf3f2;\n  border: 1px solid #f5c6c0;\n  border-radius: 4px;\n  white-space: pre-wrap;\n}\n\n.law-root .law-node {\n  width: 100%;\n}\n\n.law-root .law-table {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: 13px;\n}\n\n.law-root .law-table th,\n.law-root .law-table td {\n  padding: 6px 10px;\n  border-bottom: 1px solid var(--law-border);\n  text-align: left;\n}\n\n.law-root .law-table th {\n  font-weight: 600;\n  color: var(--law-muted);\n}\n\n/* Dark theme: layui 2.13 has no dark mode, so only the widget chrome and the\n   most common surfaces are adjusted. */\n.law-root[data-theme=\"dark\"] {\n  --law-muted: #9aa0a6;\n  --law-border: #3c4043;\n  --law-surface: #202124;\n  color: #e8eaed;\n  color-scheme: dark;\n}\n\n.law-root[data-theme=\"dark\"] .layui-input,\n.law-root[data-theme=\"dark\"] .layui-textarea,\n.law-root[data-theme=\"dark\"] .layui-form-select .layui-input,\n.law-root[data-theme=\"dark\"] .layui-table,\n.law-root[data-theme=\"dark\"] .layui-tab-title li {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl dd.layui-this {\n  background-color: #16baaa;\n  color: #fff;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table td,\n.law-root[data-theme=\"dark\"] .layui-table th {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table-view {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-tabs-header,\n.law-root[data-theme=\"dark\"] .layui-tab-title {\n  border-color: #3c4043;\n}\n\n/* Native multiple select: layui applies single-line input styling. */\n.law-root select.law-multiselect {\n  height: auto;\n  min-height: 38px;\n  padding: 6px 8px;\n  cursor: pointer;\n}\n\n.law-root[data-theme=\"dark\"] select.law-multiselect option {\n  background-color: #202124;\n  color: #e8eaed;\n}\n";
+const WIDGET_CSS = "/* Widget-level layout.  layui's own stylesheet is injected by the bridge\n   (into the document and, when the widget lives in a shadow root, into that\n   root as well), so nothing here may contain global resets. */\n\n.law-root {\n  --law-gap: 12px;\n  --law-muted: #5f6368;\n  --law-border: #e5e7eb;\n  --law-surface: #ffffff;\n  --law-text: inherit;\n  color: var(--law-text);\n  font-size: 14px;\n  line-height: 1.6;\n  min-width: 0;\n  box-sizing: border-box;\n}\n\n.law-root *,\n.law-root *::before,\n.law-root *::after {\n  box-sizing: border-box;\n}\n\n.law-root .law-field {\n  display: flex;\n  align-items: center;\n  gap: var(--law-gap);\n  margin-bottom: var(--law-gap);\n}\n\n.law-root .law-field-stacked {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 6px;\n}\n\n.law-root .law-field > .law-label {\n  flex: 0 0 auto;\n  min-width: 80px;\n  color: var(--law-muted);\n  text-align: right;\n}\n\n.law-root .law-field-stacked > .law-label {\n  text-align: left;\n}\n\n.law-root .law-field-body {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n\n.law-root .law-status {\n  padding: 16px;\n  color: var(--law-muted);\n  font-size: 13px;\n}\n\n.law-root .law-status-error {\n  color: #c0392b;\n  background: #fdf3f2;\n  border: 1px solid #f5c6c0;\n  border-radius: 4px;\n  white-space: pre-wrap;\n}\n\n.law-root .law-node {\n  width: 100%;\n}\n\n.law-root .law-table {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: 13px;\n}\n\n.law-root .law-table th,\n.law-root .law-table td {\n  padding: 6px 10px;\n  border-bottom: 1px solid var(--law-border);\n  text-align: left;\n}\n\n.law-root .law-table th {\n  font-weight: 600;\n  color: var(--law-muted);\n}\n\n/* Dark theme: layui 2.13 has no dark mode, so only the widget chrome and the\n   most common surfaces are adjusted. */\n.law-root[data-theme=\"dark\"] {\n  --law-muted: #9aa0a6;\n  --law-border: #3c4043;\n  --law-surface: #202124;\n  color: #e8eaed;\n  color-scheme: dark;\n}\n\n.law-root[data-theme=\"dark\"] .layui-input,\n.law-root[data-theme=\"dark\"] .layui-textarea,\n.law-root[data-theme=\"dark\"] .layui-form-select .layui-input,\n.law-root[data-theme=\"dark\"] .layui-table,\n.law-root[data-theme=\"dark\"] .layui-tab-title li {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl dd.layui-this {\n  background-color: #16baaa;\n  color: #fff;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table td,\n.law-root[data-theme=\"dark\"] .layui-table th {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table-view {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-tabs-header,\n.law-root[data-theme=\"dark\"] .layui-tab-title {\n  border-color: #3c4043;\n}\n\n/* Layer skins used by demos (and available to users): body-level popups, so\n   these live at the document root, not under `.law-root`. */\n.law-layer-custom .layui-layer-title {\n  background-color: #edeff2;\n}\n\n.law-layer-custom .layui-layer-btn {\n  padding: 5px 10px 10px;\n}\n\n.law-layer-custom .layui-layer-btn a {\n  background: #fff;\n  border-color: #e9e7e7;\n  color: #333;\n}\n\n.law-layer-custom .layui-layer-btn .layui-layer-btn0 {\n  border-color: #fa584d;\n  background-color: #fa584d;\n  color: #fff;\n}\n\n.law-layer-lockscreen {\n  background: url(https://unpkg.com/outeres@0.0.12/img/wallpaper/001.jpg) #16b777;\n  background-size: cover;\n  color: rgba(255, 255, 255, 1);\n}\n\n.law-layer-lockscreen .law-layer-pin {\n  width: 100%;\n  height: 38px;\n  padding: 0 8px;\n  background-color: rgba(255, 255, 255, 0.8);\n  border: none;\n  border-radius: 3px;\n  box-sizing: border-box;\n}\n\n.law-layer-lockscreen .layui-input-suffix {\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0.5);\n  border-radius: 0 3px 3px 0;\n}\n\n.law-layer-lockscreen .layui-input-suffix .layui-icon-right {\n  cursor: pointer;\n  color: #fff;\n}\n\n/* Native multiple select: layui applies single-line input styling. */\n.law-root select.law-multiselect {\n  height: auto;\n  min-height: 38px;\n  padding: 6px 8px;\n  cursor: pointer;\n}\n\n.law-root[data-theme=\"dark\"] select.law-multiselect option {\n  background-color: #202124;\n  color: #e8eaed;\n}\n";
 
 // ---------------------------------------------------------------------------
 // Assets
@@ -119,6 +119,10 @@ async function ensureRuntime(config, inDocument) {
   // DOM); in a shadow root the full CSS goes into the root while the document
   // gets just the reset-free core for layui's body-level popups.
   await Promise.all([loadCoreStyles(), inDocument ? loadFullStyles(document) : null]);
+  // Widget styles are reset-free and mostly `.law-root`-scoped, but layer
+  // skins (`.law-layer-*`) style the body-level popup, so they must also reach
+  // the document even when the widget itself lives in a shadow root.
+  loadWidgetStyles(document.head);
   const layui = await loadLayui();
   if (config && typeof config === "object" && Object.keys(config).length) {
     layui.config(config);
@@ -850,9 +854,32 @@ function renderDropdown(api) {
 
 // --- layer ----------------------------------------------------------------
 
+// Turn the `capture` node into real DOM for layer's captured-element path.
+// The wrapper is hidden (as the docs' capture element is): layer measures the
+// content, then wraps it and shows it. `renderNode` is a mountNode bound to
+// the layer's own node, so nested form controls still decorate/emit inside
+// the popup.
+function buildCapture(api, captureNode) {
+  const holder = document.createElement("div");
+  holder.setAttribute("data-law-capture", "");
+  if (api.renderNode) {
+    const rendered = api.renderNode(captureNode);
+    if (rendered) holder.appendChild(rendered);
+  }
+  // layer shows captured content and restores the inline `display` on close;
+  // start hidden so the element only appears inside the popup.
+  holder.style.display = "none";
+  return holder;
+}
+
 // `layer` is a JS-only API: the node renders a trigger button that opens the
 // popup. layer appends the popup to document.body, so the document-level
 // "core" stylesheet (reset-free layui CSS) covers it in both hosts.
+//
+// A "stage" is one popup description. The node props are the first stage;
+// `next` / `next_cancel` (and the `next` button action) open follow-up stages,
+// which is how the docs chain examples (icon tour, molv -> lan, confirm ->
+// msg).
 function renderLayer(api) {
   const { node, session, layui } = api;
   const props = { ...(node.props || {}) };
@@ -869,104 +896,381 @@ function renderLayer(api) {
   // Layers live in document.body; remember them so teardown can close them.
   const indexes = new Set();
 
-  // `value` is the confirm/cancel result (or the prompt input); `extra` adds
-  // the layer index for load layers.
-  const emit = (event, value, extra) => {
-    session.emit((node.events && node.events[event]) || event, node, value, extra || {});
+  const stageOf = (raw) => ({ ...raw, options: { ...(raw.options || {}) } });
+  const emit = (stage, event, value, extra) => {
+    const map = (stage && stage.events) || node.events || {};
+    session.emit(map[event] || event, node, value, extra || {});
   };
-  // Options shared by every kind; per-kind options are layered on top.
-  const base = () => {
-    const options = { ...(props.options || {}) };
-    if (props.title !== undefined) options.title = props.title;
+  // Esc closes the newest layer that opted in (the docs' multi-window
+  // example). One document listener serves every layer node.
+  const escStack = (layer.__lawEscStack = layer.__lawEscStack || []);
+  const unregisterEsc = (index) => {
+    const position = escStack.indexOf(index);
+    if (position !== -1) escStack.splice(position, 1);
+  };
+  const registerEsc = (stage, index) => {
+    if (!stage.esc_close || index === undefined) return;
+    unregisterEsc(index);
+    escStack.unshift(index);
+    if (layer.__lawEscBound) return;
+    layer.__lawEscBound = true;
+    document.addEventListener("keyup", (event) => {
+      if (event.key !== "Escape" || !escStack.length) return;
+      layer.close(escStack.shift());
+    });
+  };
+  // layui options are camelCase (`shadeClose`, `btnAlign`, `tipsMore`); accept
+  // the Python-friendly snake_case spellings and translate them.
+  const SNAKE_OPTIONS = {
+    shade_close: "shadeClose",
+    btn_align: "btnAlign",
+    tips_more: "tipsMore",
+    close_btn: "closeBtn",
+    is_out_anim: "isOutAnim",
+    max_width: "maxWidth",
+    move_type: "moveType",
+    form_type: "formType",
+    btn_async: "btnAsync",
+    btns: "btn",
+  };
+
+  const openNext = (stage, key) => {
+    const raw = stage[key];
+    if (!raw) return;
+    const next = Array.isArray(raw) ? raw[0] : raw;
+    openStage(stageOf(next));
+  };
+
+  // Submit buttons inside popup HTML (the docs' layer + form example) cannot
+  // run the page's own handler, so collect the fields and report them.
+  const bindForm = (stage, layero) => {
+    layero.on("click", "[lay-submit]", (event) => {
+      event.preventDefault();
+      const values = {};
+      layero.find("input,select,textarea").each(function () {
+        if (!this.name) return;
+        if (this.type === "checkbox") {
+          values[this.name] = this.checked ? (this.value === "on" ? true : this.value) : false;
+        } else if (this.type === "radio") {
+          if (this.checked) values[this.name] = this.value;
+        } else {
+          values[this.name] = this.value;
+        }
+      });
+      emit(stage, "submit", values, { values });
+      session.flush();
+    });
+  };
+
+  // The docs' lock-screen example checks a password and closes only on a
+  // match: `unlock` holds the expected value; elements marked
+  // `data-law-unlock` (or Enter in the input) try it.
+  const bindUnlock = (stage, layero, index) => {
+    const input = layero.find("input")[0];
+    const pass = String(stage.unlock);
+    const attempt = () => {
+      if (String(input && input.value).trim() === pass) {
+        layer.close(index);
+        emit(stage, "unlock", true);
+        session.flush();
+      } else {
+        layer.msg("锁屏密码输入有误", { offset: "16px", anim: "slideDown" });
+        input?.focus();
+      }
+    };
+    layero.find("[data-law-unlock]").on("click", attempt);
+    layui.$(input).on("keyup", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) attempt();
+    });
+  };
+
+  const optionsFor = (stage, ctx = {}) => {
+    const options = { ...stage.options };
+    for (const [snake, camel] of Object.entries(SNAKE_OPTIONS)) {
+      if (snake in options) {
+        options[camel] = options[snake];
+        delete options[snake];
+      }
+    }
+    // `auto_close` is not a layer option: every branch closes by index.
+    const autoClose = Number(options.auto_close ?? stage.auto_close ?? 0);
+    delete options.auto_close;
+    // Non-enumerable so layer's option merge never sees or stores it.
+    Object.defineProperty(options, "__autoClose", { value: autoClose, enumerable: false });
+    if (stage.title !== undefined) options.title = stage.title;
+    if (stage.btns) options.btn = [...stage.btns];
+    if (stage.btn_async) options.btnAsync = true;
+    // The docs' examples pass JS callbacks (`success`, `end`, `btn1`, ...)
+    // that cannot cross the JSON boundary; the flags below generate the
+    // common ones and forward their results as events instead.
+    const end = options.end;
+    // layer calls `end()` unbound, so the index has to come from the closure.
+    options.end = () => {
+      unregisterEsc(options.__index);
+      indexes.delete(options.__index);
+      // A button/confirm callback already reported the outcome; a bare
+      // `close` would overwrite it in the host.
+      if (!ctx.actionTaken) emit(stage, "close", null, { reason: "close" });
+      if (typeof end === "function") end();
+    };
+    const success = options.success;
+    options.success = (layero, index) => {
+      options.__index = index;
+      indexes.add(index);
+      registerEsc(stage, index);
+      // Content may carry a `.layui-form` (e.g. the login page example); the
+      // form lives in document.body, so a document-wide render decorates it.
+      if (typeof stage.content === "string" && stage.content.includes("layui-form")) {
+        layui.form.render();
+        bindForm(stage, layero);
+      }
+      if (stage.full) layer.full(index);
+      if (stage.set_top) layer.setTop(layero);
+      if (stage.unlock) bindUnlock(stage, layero, index);
+      if (typeof success === "function") success(layero, index);
+    };
     return options;
   };
-  const content = props.content ?? "";
 
-  const open = () => {
-    const kind = String(props.kind || "dialog").toLowerCase();
-    const done = (value, eventName) => {
-      emit(eventName, value);
+  // `btnAsync`: the docs simulate a request inside the button callback; here
+  // the promise resolves after `btn_async` milliseconds (1000 by default).
+  const asyncify = (stage, fn) => {
+    if (!stage.btn_async) return fn;
+    const delay = typeof stage.btn_async === "number" ? stage.btn_async : 1000;
+    return (index, layero, that) => {
+      that.loading(true);
+      return new Promise((resolve) => setTimeout(() => resolve(fn?.(index, layero, that)), delay));
+    };
+  };
+
+  // Turn the docs' callback style buttons into events: every `btn` entry gets
+  // a handler that reports its index and label, then performs its action.
+  const attachButtons = (stage, options, ctx = {}) => {
+    const btns = stage.btns;
+    if (!btns) return;
+    const kind = String(stage.kind || "dialog").toLowerCase();
+    btns.forEach((label, index) => {
+      const key = index === 0 ? "yes" : `btn${index + 1}`;
+      options[key] = asyncify(stage, (buttonIndex) => {
+        ctx.actionTaken = true;
+        const payload = { index: buttonIndex ?? index, text: label };
+        emit(stage, "button", payload, { button: payload });
+        // In a confirm box the first two buttons are 确定/取消: report the
+        // same outcome as layer.confirm's own callbacks, then follow-ups.
+        if (kind === "confirm" && index === 0) {
+          emit(stage, "confirm", true);
+          openNext(stage, "next");
+        } else if (kind === "confirm" && index === 1) {
+          emit(stage, "cancel", false);
+          openNext(stage, "next_cancel");
+        }
+        session.flush();
+        const action = (stage.actions || [])[index];
+        if (action === "close_all") layer.closeAll();
+        else if (action === "reopen") queueMicrotask(() => openStage(stage));
+        else if (action === "next") queueMicrotask(() => openNext(stage, "next"));
+      });
+    });
+  };
+
+  const openStage = (stage) => {
+    const kind = String(stage.kind || "dialog").toLowerCase();
+    const content = stage.content ?? "";
+    // Shared with `optionsFor`'s `end`: suppresses a redundant close event.
+    const ctx = { actionTaken: false };
+    const done = (event, value, extra) => {
+      ctx.actionTaken = true;
+      emit(stage, event, value, extra);
       session.flush();
     };
+
     if (kind === "msg") {
-      const options = base();
-      // Show layui's success icon unless the caller picked one; keep the toast
-      // open long enough to be readable.
-      options.icon = options.icon ?? 1;
-      options.time = options.time ?? 3000;
-      options.end = () => emit("close", null);
+      // No icon by default: that is layui's dark toast, as in the docs.
+      const options = optionsFor(stage, ctx);
+      attachButtons(stage, options, ctx);
       indexes.add(layer.msg(content, options));
       return;
     }
     if (kind === "confirm") {
+      // `layer.confirm(content, opts, yes, cancel)` layers `opts` last, so
+      // custom buttons (docs' "确定/关闭") override the default callbacks.
+      const options = optionsFor(stage, ctx);
+      attachButtons(stage, options, ctx);
       indexes.add(
         layer.confirm(
           content,
-          base(),
+          options,
           (index) => {
             layer.close(index);
-            done(true, "confirm");
+            done("confirm", true);
+            openNext(stage, "next");
           },
           (index) => {
             layer.close(index);
-            done(false, "cancel");
+            done("cancel", false);
+            openNext(stage, "next_cancel");
           },
         ),
       );
       return;
     }
     if (kind === "alert") {
+      const options = optionsFor(stage, ctx);
+      attachButtons(stage, options, ctx);
+      // Countdown alert: rewrite the title every second, as in the docs.
+      if (stage.countdown) {
+        const openSuccess = options.success;
+        options.time = options.time ?? 5000;
+        options.success = (layero, index) => {
+          let left = Math.ceil(Number(options.time) / 1000);
+          const tick = (start) => {
+            if (!start) left -= 1;
+            layer.title(
+              `<span class="layui-font-red">${Math.max(left, 0)}</span> 秒后自动关闭`,
+              index,
+            );
+            if (left > 0) options.__timer = setTimeout(() => tick(false), 1000);
+          };
+          tick(true);
+          openSuccess(layero, index);
+        };
+        const openEnd = options.end;
+        options.end = function () {
+          clearTimeout(options.__timer);
+          openEnd.apply(this, arguments);
+        };
+      }
       indexes.add(
-        layer.alert(content, base(), (index) => {
-          layer.close(index);
-          done(true, "confirm");
-        }),
+        layer.alert(
+          content,
+          options,
+          asyncify(stage, (index) => {
+            layer.close(index);
+            done("confirm", true);
+            openNext(stage, "next");
+          }),
+        ),
       );
       return;
     }
     if (kind === "load") {
       // A loading layer never closes on its own. `auto_close` (ms) lets the
       // caller schedule it, since Python code cannot run inside the browser.
-      const options = base();
-      const autoClose = Number(options.auto_close ?? props.auto_close ?? 0);
-      delete options.auto_close;
-      const index = layer.load(Number(options.icon ?? 0), options);
+      const options = optionsFor(stage, ctx);
+      const icon = Number(options.icon ?? 0);
+      delete options.icon;
+      const index = layer.load(icon, options);
       indexes.add(index);
-      emit("open", index, { index });
+      emit(stage, "open", index, { index });
       session.flush();
-      if (autoClose > 0) setTimeout(() => layer.close(index), autoClose);
+      if (options.__autoClose > 0) setTimeout(() => layer.close(index), options.__autoClose);
       return;
     }
     if (kind === "tips") {
-      // A tips layer must not survive the widget being torn down.
-      indexes.add(layer.tips(content, trigger, base()));
+      // A tip layer must not survive the widget being torn down.
+      indexes.add(layer.tips(content, trigger, optionsFor(stage, ctx)));
       return;
     }
     if (kind === "prompt") {
+      const options = optionsFor(stage, ctx);
+      // layer.prompt takes only options: the docs pass the prompt text as
+      // `title`, so use `content` when no title was given.
+      if (options.title === undefined && typeof content === "string" && content) {
+        options.title = content;
+      }
+      // layer.prompt's internal `yes` is merged *before* the caller's options,
+      // so leave `yes` alone and only wire the second button.
+      options.btn2 = (promptIndex) => {
+        layer.close(promptIndex);
+        done("cancel", null);
+      };
       indexes.add(
-        layer.prompt(base(), (value, index) => {
-          layer.close(index);
-          done(value, "confirm");
+        layer.prompt(options, (value, promptIndex) => {
+          layer.close(promptIndex);
+          done("confirm", value);
+          openNext(stage, "next");
         }),
       );
       return;
     }
-    const type = kind === "iframe" ? 2 : Number(props.type ?? 1) || 1;
-    indexes.add(
-      layer.open({
-        type,
-        content,
-        ...base(),
-        end: () => emit("close", null),
-      }),
-    );
-    emit("open", null);
+    if (kind === "photos") {
+      const options = optionsFor(stage, ctx);
+      options.photos = options.photos || {
+        title: stage.photos_title || props.photos_title || "Photos",
+        start: 0,
+        data: stage.photos || props.photos || [],
+      };
+      indexes.add(layer.photos(options));
+      return;
+    }
+    if (kind === "tab") {
+      const options = optionsFor(stage, ctx);
+      if (Array.isArray(stage.tabs)) {
+        // Plain JSON tabs (HTML strings): layer.tab renders its own markup.
+        options.tab = stage.tabs;
+        indexes.add(layer.tab(options));
+        emit(stage, "open", null);
+        session.flush();
+        return;
+      }
+      // The docs' `layer.tab` writes tab bodies as HTML strings, which would
+      // detach interactive controls from the session. Open a page layer with
+      // a real `lay.tabs` component mounted inside it instead.
+      const tabsNode = stage.content;
+      if (tabsNode && typeof tabsNode === "object" && api.renderNode) {
+        const panel = document.createElement("div");
+        panel.style.padding = "16px";
+        panel.style.display = "none";
+        const tabsEl = api.renderNode(tabsNode);
+        if (tabsEl) {
+          panel.appendChild(tabsEl);
+          options.title = false;
+        }
+        // layer's captured-element path only works for elements that are
+        // already under document.body, so park the panel there first.
+        document.body.appendChild(panel);
+        options.content = layui.$(panel);
+        const end = options.end;
+        options.end = () => {
+          end();
+          panel.remove();
+        };
+      } else {
+        options.content = "<div></div>";
+      }
+      indexes.add(layer.open({ type: 1, ...options }));
+      emit(stage, "open", null);
+      session.flush();
+      return;
+    }
+
+    // Page / iframe layer. Captured content is built per open: layer unwraps
+    // and moves the element on close, so it cannot be reused.
+    const options = optionsFor(stage, ctx);
+    attachButtons(stage, options, ctx);
+    if (stage.capture && api.renderNode) {
+      // layer only handles captured elements that sit under document.body;
+      // the popup unwraps it on close, and `end` removes the holder again.
+      const capture = buildCapture(api, stage.capture);
+      document.body.appendChild(capture);
+      const end = options.end;
+      options.end = () => {
+        end();
+        capture.remove();
+      };
+      options.content = layui.$(capture);
+    } else {
+      options.content = content;
+    }
+    const type = kind === "iframe" ? 2 : Number(stage.type ?? 1) || 1;
+    indexes.add(layer.open({ type, ...options }));
+    emit(stage, "open", null);
     session.flush();
   };
 
   trigger.addEventListener("click", (event) => {
     event.preventDefault?.();
-    open();
+    openStage(stageOf(props));
   });
 
   return {

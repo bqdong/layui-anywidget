@@ -275,6 +275,29 @@ class TestDisplayHelpers:
         with pytest.raises(ValueError):
             lay.layer("x", kind="nope")
 
+    def test_layer_stages(self) -> None:
+        confirm = lay.layer(
+            "确定吗?",
+            kind="confirm",
+            btns=["确定", "关闭"],
+            next=lay.layer("已确定", kind="msg"),
+            next_cancel=lay.layer("已取消", kind="msg"),
+            actions=["next", "close_all"],
+        )
+        props = confirm["props"]
+        assert props["btns"] == ["确定", "关闭"]
+        assert props["actions"] == ["next", "close_all"]
+        assert props["next"] == {"kind": "msg", "content": "已确定", "type": 1}
+        assert props["next_cancel"]["content"] == "已取消"
+
+        tabbed = lay.layer(
+            kind="tab",
+            tabs=[("标题一", lay.text("内容一")), ("标题二", lay.text("内容二"))],
+        )
+        tabs = tabbed["props"]["content"]
+        assert tabs["type"] == "tabs"
+        assert [tab["props"]["title"] for tab in tabs["children"]] == ["标题一", "标题二"]
+
     def test_layout(self) -> None:
         assert lay.row()["class"] == "layui-row"
         assert lay.row(gap=15)["class"] == "layui-row layui-col-space15"
