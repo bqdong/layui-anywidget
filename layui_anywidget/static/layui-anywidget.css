@@ -130,3 +130,16 @@
 .law-root[data-theme="dark"] .layui-tab-title {
   border-color: #3c4043;
 }
+
+/* Native multiple select: layui applies single-line input styling. */
+.law-root select.law-multiselect {
+  height: auto;
+  min-height: 38px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.law-root[data-theme="dark"] select.law-multiselect option {
+  background-color: #202124;
+  color: #e8eaed;
+}

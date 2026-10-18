@@ -156,9 +156,10 @@ class TestFormHelpers:
 
     def test_checkbox_group(self) -> None:
         node = lay.checkbox_group("tags", ["a", "b"])
-        container = node["children"][0]
-        assert container["props"]["group_model"] == "tags"
-        assert [child["id"] for child in container["children"]] == ["tags-a", "tags-b"]
+        control = node["children"][0]
+        assert control["type"] == "checkbox-group"
+        assert control["model"] == "tags"
+        assert [item["value"] for item in control["props"]["options"]] == ["a", "b"]
 
     def test_switch_custom_values(self) -> None:
         props = lay.switch("s", checked_value="on", unchecked_value="off")["children"][0]["props"]
@@ -261,4 +262,8 @@ class TestDisplayHelpers:
 
     def test_layout(self) -> None:
         assert lay.row()["class"] == "layui-row"
+        assert lay.row(gap=15)["class"] == "layui-row layui-col-space15"
         assert lay.col(span=4)["class"] == "layui-col-md4"
+        assert lay.col(xs=12, md=6)["class"] == "layui-col-xs12 layui-col-md6"
+        assert lay.col(md=4, offset=4)["class"] == "layui-col-md4 layui-col-md-offset4"
+        assert lay.col()["class"] == "layui-col"

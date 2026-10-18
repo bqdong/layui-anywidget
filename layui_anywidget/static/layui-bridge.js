@@ -26,7 +26,7 @@ const LAYUI_CSS_CORE = ".layui-border-box,.layui-border-box *{box-sizing:border-
 // Our own layout/theme rules. Hosts inject `_css` into the document, which
 // misses shadow roots (marimo), so the bridge adds the same text to whichever
 // scope it renders into.
-const WIDGET_CSS = "/* Widget-level layout.  layui's own stylesheet is injected by the bridge\n   (into the document and, when the widget lives in a shadow root, into that\n   root as well), so nothing here may contain global resets. */\n\n.law-root {\n  --law-gap: 12px;\n  --law-muted: #5f6368;\n  --law-border: #e5e7eb;\n  --law-surface: #ffffff;\n  --law-text: inherit;\n  color: var(--law-text);\n  font-size: 14px;\n  line-height: 1.6;\n  min-width: 0;\n  box-sizing: border-box;\n}\n\n.law-root *,\n.law-root *::before,\n.law-root *::after {\n  box-sizing: border-box;\n}\n\n.law-root .law-field {\n  display: flex;\n  align-items: center;\n  gap: var(--law-gap);\n  margin-bottom: var(--law-gap);\n}\n\n.law-root .law-field-stacked {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 6px;\n}\n\n.law-root .law-field > .law-label {\n  flex: 0 0 auto;\n  min-width: 80px;\n  color: var(--law-muted);\n  text-align: right;\n}\n\n.law-root .law-field-stacked > .law-label {\n  text-align: left;\n}\n\n.law-root .law-field-body {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n\n.law-root .law-status {\n  padding: 16px;\n  color: var(--law-muted);\n  font-size: 13px;\n}\n\n.law-root .law-status-error {\n  color: #c0392b;\n  background: #fdf3f2;\n  border: 1px solid #f5c6c0;\n  border-radius: 4px;\n  white-space: pre-wrap;\n}\n\n.law-root .law-node {\n  width: 100%;\n}\n\n.law-root .law-table {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: 13px;\n}\n\n.law-root .law-table th,\n.law-root .law-table td {\n  padding: 6px 10px;\n  border-bottom: 1px solid var(--law-border);\n  text-align: left;\n}\n\n.law-root .law-table th {\n  font-weight: 600;\n  color: var(--law-muted);\n}\n\n/* Dark theme: layui 2.13 has no dark mode, so only the widget chrome and the\n   most common surfaces are adjusted. */\n.law-root[data-theme=\"dark\"] {\n  --law-muted: #9aa0a6;\n  --law-border: #3c4043;\n  --law-surface: #202124;\n  color: #e8eaed;\n  color-scheme: dark;\n}\n\n.law-root[data-theme=\"dark\"] .layui-input,\n.law-root[data-theme=\"dark\"] .layui-textarea,\n.law-root[data-theme=\"dark\"] .layui-form-select .layui-input,\n.law-root[data-theme=\"dark\"] .layui-table,\n.law-root[data-theme=\"dark\"] .layui-tab-title li {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl dd.layui-this {\n  background-color: #16baaa;\n  color: #fff;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table td,\n.law-root[data-theme=\"dark\"] .layui-table th {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table-view {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-tabs-header,\n.law-root[data-theme=\"dark\"] .layui-tab-title {\n  border-color: #3c4043;\n}\n";
+const WIDGET_CSS = "/* Widget-level layout.  layui's own stylesheet is injected by the bridge\n   (into the document and, when the widget lives in a shadow root, into that\n   root as well), so nothing here may contain global resets. */\n\n.law-root {\n  --law-gap: 12px;\n  --law-muted: #5f6368;\n  --law-border: #e5e7eb;\n  --law-surface: #ffffff;\n  --law-text: inherit;\n  color: var(--law-text);\n  font-size: 14px;\n  line-height: 1.6;\n  min-width: 0;\n  box-sizing: border-box;\n}\n\n.law-root *,\n.law-root *::before,\n.law-root *::after {\n  box-sizing: border-box;\n}\n\n.law-root .law-field {\n  display: flex;\n  align-items: center;\n  gap: var(--law-gap);\n  margin-bottom: var(--law-gap);\n}\n\n.law-root .law-field-stacked {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 6px;\n}\n\n.law-root .law-field > .law-label {\n  flex: 0 0 auto;\n  min-width: 80px;\n  color: var(--law-muted);\n  text-align: right;\n}\n\n.law-root .law-field-stacked > .law-label {\n  text-align: left;\n}\n\n.law-root .law-field-body {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n\n.law-root .law-status {\n  padding: 16px;\n  color: var(--law-muted);\n  font-size: 13px;\n}\n\n.law-root .law-status-error {\n  color: #c0392b;\n  background: #fdf3f2;\n  border: 1px solid #f5c6c0;\n  border-radius: 4px;\n  white-space: pre-wrap;\n}\n\n.law-root .law-node {\n  width: 100%;\n}\n\n.law-root .law-table {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: 13px;\n}\n\n.law-root .law-table th,\n.law-root .law-table td {\n  padding: 6px 10px;\n  border-bottom: 1px solid var(--law-border);\n  text-align: left;\n}\n\n.law-root .law-table th {\n  font-weight: 600;\n  color: var(--law-muted);\n}\n\n/* Dark theme: layui 2.13 has no dark mode, so only the widget chrome and the\n   most common surfaces are adjusted. */\n.law-root[data-theme=\"dark\"] {\n  --law-muted: #9aa0a6;\n  --law-border: #3c4043;\n  --law-surface: #202124;\n  color: #e8eaed;\n  color-scheme: dark;\n}\n\n.law-root[data-theme=\"dark\"] .layui-input,\n.law-root[data-theme=\"dark\"] .layui-textarea,\n.law-root[data-theme=\"dark\"] .layui-form-select .layui-input,\n.law-root[data-theme=\"dark\"] .layui-table,\n.law-root[data-theme=\"dark\"] .layui-tab-title li {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl {\n  background-color: #202124;\n  border-color: #3c4043;\n  color: #e8eaed;\n}\n\n.law-root[data-theme=\"dark\"] .layui-form-select dl dd.layui-this {\n  background-color: #16baaa;\n  color: #fff;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table td,\n.law-root[data-theme=\"dark\"] .layui-table th {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-table-view {\n  border-color: #3c4043;\n}\n\n.law-root[data-theme=\"dark\"] .layui-tabs-header,\n.law-root[data-theme=\"dark\"] .layui-tab-title {\n  border-color: #3c4043;\n}\n\n/* Native multiple select: layui applies single-line input styling. */\n.law-root select.law-multiselect {\n  height: auto;\n  min-height: 38px;\n  padding: 6px 8px;\n  cursor: pointer;\n}\n\n.law-root[data-theme=\"dark\"] select.law-multiselect option {\n  background-color: #202124;\n  color: #e8eaed;\n}\n";
 
 // ---------------------------------------------------------------------------
 // Assets
@@ -113,8 +113,12 @@ function loadLayui() {
   return scriptPromise;
 }
 
-async function ensureRuntime(config) {
-  await Promise.all([loadCoreStyles(), loadFullStyles(document)]);
+async function ensureRuntime(config, inDocument) {
+  // The full stylesheet carries layui's global `body` reset. Only add it to
+  // the document when the widget actually renders there (Jupyter's light
+  // DOM); in a shadow root the full CSS goes into the root while the document
+  // gets just the reset-free core for layui's body-level popups.
+  await Promise.all([loadCoreStyles(), inDocument ? loadFullStyles(document) : null]);
   const layui = await loadLayui();
   if (config && typeof config === "object" && Object.keys(config).length) {
     layui.config(config);
@@ -551,7 +555,10 @@ function renderDatePicker(api) {
   const current = node.model ? session.state[node.model] : undefined;
   const input = document.createElement("input");
   input.className = "layui-input";
-  input.setAttribute("id", api.uid);
+  // layui identifies instances by this id; two datepickers in one widget
+  // would otherwise share `api.uid` and look up the wrong instance.
+  const dateId = `${api.uid}-${node.id || "date"}`;
+  input.setAttribute("id", dateId);
   holder.appendChild(input);
 
   const emit = (value, eventName, raw) => {
@@ -563,17 +570,11 @@ function renderDatePicker(api) {
     session.emit((node.events && node.events[eventName]) || eventName, node, value, raw);
   };
 
-  layui.laydate.render({
+  const options = {
     elem: input,
     type: props.type || "date",
     range: props.range || false,
-    format: props.format || undefined,
-    value: current ?? props.value ?? undefined,
-    min: props.min ?? undefined,
-    max: props.max ?? undefined,
-    theme: props.theme,
     trigger: props.trigger || "click",
-    position: props.position,
     done(value, date, endDate) {
       emit(value, "done", { value, date, endDate });
       session.flush();
@@ -581,14 +582,23 @@ function renderDatePicker(api) {
     change(value) {
       emit(value, "change", { value });
     },
-  });
+  };
+  // `laydate` merges its options with jQuery.extend, so an explicit
+  // `undefined` overwrites the default instead of leaving it in place. It
+  // defaults `min`/`max` to 1900/2099; passing `min: undefined` makes every
+  // day except today unselectable.
+  for (const key of ["format", "value", "min", "max", "theme", "position"]) {
+    const value = key === "value" ? current ?? props.value : props[key];
+    if (value !== undefined && value !== null && value !== "") options[key] = value;
+  }
+  layui.laydate.render(options);
 
   return {
     el: holder,
     update(value) {
       if (value === undefined || value === null) return;
       const laydate = layui.laydate;
-      const inst = laydate.getInst?.(input);
+      const inst = laydate.getInst?.(dateId);
       if (inst) {
         session.applyFromHost(() => inst.setValue(value).done().remove?.());
       } else {
@@ -632,6 +642,29 @@ function renderTable(api) {
       toolbar: props.toolbar,
       title: props.title,
       done(res, curr, count) {
+        // layui renders its checkboxes with `form.render` scoped to the table
+        // view, but that lookup runs from `document`. Inside a shadow root it
+        // finds nothing, leaving the native checkboxes undecorated.
+        // layui inserts the view as a *sibling* after the elem we passed.
+        const view =
+          holder.querySelector(".layui-table-view") ??
+          (holder.nextElementSibling?.classList.contains("layui-table-view")
+            ? holder.nextElementSibling
+            : null);
+        if (!view) return;
+        // `done` re-fires after sort, page and data reloads, and layui has
+        // re-created the raw checkboxes by then, so re-decorate every time.
+        // No filter is passed: a filter turns into a document-rooted
+        // `$('.layui-form[lay-filter=...]')` lookup that cannot see a shadow
+        // root, so the document-wide pass has to do the work while the view
+        // is temporarily attached to document.body.
+        withDocumentRuntime(view, () => {
+          // The filter must be re-read here; layui re-creates the view after
+          // a sort and the new node carries a fresh filter value.
+          const filter = view.getAttribute("lay-filter");
+          if (filter) layui.form.render("checkbox", filter);
+          else layui.form.render("checkbox");
+        });
         registerTableEvents(layui, tableId, filter, node, session);
         if (node.events?.done) session.emit(node.events.done, node, { total: count }, { curr, count });
       },
@@ -697,13 +730,13 @@ function renderTabs(api) {
     title: item.props?.title ?? `Tab ${index + 1}`,
     id: item.id || `tab${index + 1}`,
   }));
-  // Tab bodies use layui's HTML-string mode; nested widgets are rendered to
-  // markup once, so tab content is static in 0.1.
-  const body = items.map((item, index) => {
-    const container = document.createElement("div");
-    if (api.renderChildren) container.appendChild(api.renderChildren(item.children));
-    return { id: item.id || `tab${index + 1}`, content: container.innerHTML };
-  });
+  // Render the tab shells first, then mount the real child nodes into each
+  // body. Passing HTML strings would serialize nested controls and detach
+  // them from the session (no layui decoration, no state binding).
+  const body = items.map((item, index) => ({
+    id: item.id || `tab${index + 1}`,
+    content: "",
+  }));
   const holder = document.createElement("div");
   const activeIndex = Math.max(0, header.findIndex((item) => item.id === current));
 
@@ -716,6 +749,13 @@ function renderTabs(api) {
     trigger: props.trigger || "click",
     headerMode: props.header_mode || "auto",
     closable: Boolean(props.closable),
+  });
+
+  items.forEach((item, index) => {
+    const id = item.id || `tab${index + 1}`;
+    const panel = holder.querySelector(`.layui-tabs-item[lay-id="${id}"]`);
+    if (!panel || !api.renderChildren) return;
+    panel.appendChild(api.renderChildren(item.children));
   });
 
   // layui fires afterChange(<tabs id>) on its global event bus. The payload
@@ -811,10 +851,12 @@ function renderDropdown(api) {
 // --- progress -------------------------------------------------------------
 
 function renderProgress(api) {
-  const { node, session, layui } = api;
+  const { node, session } = api;
   const props = { ...(node.props || {}) };
   const holder = document.createElement("div");
   holder.className = "layui-progress";
+  if (props.class_) holder.classList.add(...String(props.class_).split(/\s+/).filter(Boolean));
+  applyStyle(holder, node.style);
   const valueKey = node.bind?.value;
   const read = () => {
     const value = valueKey ? session.state[valueKey] : props.value;
@@ -842,11 +884,14 @@ function renderProgress(api) {
 // --- collapse -------------------------------------------------------------
 
 function renderCollapse(api) {
-  const { node, session, layui } = api;
+  const { node, layui } = api;
   const props = { ...(node.props || {}) };
   const holder = document.createElement("div");
   holder.className = "layui-collapse";
   if (props.accordion) holder.setAttribute("lay-accordion", "");
+  if (props["lay-filter"] || node.id) {
+    holder.setAttribute("lay-filter", props["lay-filter"] || node.id);
+  }
 
   for (const item of node.children || []) {
     if (!item || item.type !== "collapse-item") continue;
@@ -856,7 +901,11 @@ function renderCollapse(api) {
     titleEl.className = "layui-colla-title";
     titleEl.textContent = item.props?.title || "";
     const contentEl = document.createElement("div");
-    contentEl.className = "layui-colla-content" + (item.props?.open ? " layui-show" : "");
+    // layui reads the initial state from the inline `display` value
+    // (`"none"` means collapsed) and then drops `layui-show`, so an open
+    // item must start with `display: block`.
+    contentEl.className = "layui-colla-content";
+    contentEl.style.display = item.props?.open ? "block" : "none";
     const body = api.renderChildren ? api.renderChildren(item.children) : null;
     if (body) contentEl.appendChild(body);
     itemEl.appendChild(titleEl);
@@ -864,8 +913,9 @@ function renderCollapse(api) {
     holder.appendChild(itemEl);
   }
 
+  // layui resolves `elem` through jQuery and its click handler is bound
+  // synchronously, so an element argument does not need document scope.
   layui.collapse.render({ elem: layui.$(holder) });
-  layui.element.render("collapse", layui.$(holder));
   return { el: holder };
 }
 
@@ -924,6 +974,7 @@ function renderBreadcrumb(api) {
   const props = { ...(node.props || {}) };
   const holder = document.createElement("span");
   holder.className = "layui-breadcrumb";
+  if (props["lay-separator"]) holder.setAttribute("lay-separator", props["lay-separator"]);
   for (const item of props.items || []) {
     const link = document.createElement("a");
     link.href = item.href || "javascript:;";
@@ -969,12 +1020,10 @@ function renderCarousel(api) {
     anim: props.anim || "",
     trigger: props.trigger || "click",
     index: typeof current === "number" ? current : 0,
-  });
-
-  layui.element.on(`carousel(${api.filter})`, () => {});
-  instance.on?.("change", (data) => {
-    if (node.model) session.setValue(node.model, data.index);
-    session.emit((node.events && node.events.change) || "change", node, data.index, plainData(data));
+    change(data) {
+      if (node.model) session.setValue(node.model, data.index);
+      session.emit((node.events && node.events.change) || "change", node, data.index, plainData(data));
+    },
   });
 
   return { el: holder };
@@ -986,25 +1035,46 @@ function renderLaypage(api) {
   const { node, session, layui } = api;
   const props = { ...(node.props || {}) };
   const holder = document.createElement("div");
-  const curr = node.bind?.curr ? session.state[node.bind.curr] : props.curr ?? 1;
-  const instance = layui.laypage.render({
-    elem: holder,
-    count: props.count ?? props.total ?? 0,
-    limit: props.limit ?? 10,
-    limits: props.limits,
-    curr: curr ?? 1,
-    layout: props.layout || ["prev", "page", "next", "skip", "count", "limit"],
-    jump(obj, first) {
-      if (first) return;
-      const key = node.updates?.change || node.updates?.page;
-      if (key) session.setValue(key, obj.curr);
-      session.emit((node.events && node.events.change) || "change", node, obj.curr, plainData(obj));
-    },
-  });
+  const read = () => {
+    const value = node.bind?.curr ? session.state[node.bind.curr] : props.curr;
+    return Number(value) || 1;
+  };
+  let curr = read();
+  let rendered = false;
+
+  const show = (page) => {
+    curr = page;
+    holder.innerHTML = "";
+    layui.laypage.render({
+      elem: holder,
+      count: props.count ?? props.total ?? 0,
+      limit: props.limit ?? 10,
+      limits: props.limits,
+      curr: page,
+      layout: props.layout || ["prev", "page", "next", "skip", "count", "limit"],
+      jump(obj, first) {
+        if (first) return;
+        const key = node.updates?.change || node.updates?.page;
+        if (key) session.setValue(key, obj.curr);
+        session.emit((node.events && node.events.change) || "change", node, obj.curr, plainData(obj));
+      },
+    });
+    rendered = true;
+  };
+
   return {
     el: holder,
+    afterMount() {
+      // laypage re-finds its own view with `document.getElementById`, which
+      // cannot see nodes inside a shadow root; it therefore binds no click
+      // handlers there. Render while the holder is temporarily attached to
+      // document.body, then move it back with the handlers in place.
+      withDocumentRuntime(holder, () => show(curr));
+    },
     update(value) {
-      instance?.config && (instance.config.curr = value);
+      if (!rendered || value === undefined || value === null) return;
+      if (Number(value) === curr) return;
+      withDocumentRuntime(holder, () => show(Number(value) || 1));
     },
   };
 }
@@ -1030,7 +1100,15 @@ const COMPONENT_RENDERERS = {
 // Form controls
 // ---------------------------------------------------------------------------
 
-const FORM_TYPES = new Set(["input", "textarea", "select", "checkbox", "switch", "radio"]);
+const FORM_TYPES = new Set([
+  "input",
+  "textarea",
+  "select",
+  "checkbox",
+  "checkbox-group",
+  "switch",
+  "radio",
+]);
 
 function optionValue(item) {
   if (item && typeof item === "object") {
@@ -1054,7 +1132,16 @@ function buildFormControl(node) {
       break;
     case "select":
       control = document.createElement("select");
-      if (props.multiple) control.multiple = true;
+      if (props.multiple) {
+        // layui 2.13 decorates a select as a single-choice dropdown and
+        // replaces the selection on every click, so `multiple` cannot survive
+        // decoration. Keep the native control instead (`lay-ignore` makes
+        // layui show it and skip its renderer).
+        control.multiple = true;
+        control.setAttribute("lay-ignore", "");
+        control.className = "layui-input law-multiselect";
+        control.size = Math.min(Math.max((props.options || []).length, 2), 5);
+      }
       if (props.search) control.setAttribute("lay-search", "");
       for (const item of props.options || []) {
         const { label, value, disabled } = optionValue(item);
@@ -1078,6 +1165,24 @@ function buildFormControl(node) {
       }
       break;
     }
+    case "checkbox-group": {
+      // Several checkboxes sharing one bound list, e.g. `["a", "c"]`.
+      const group = document.createElement("div");
+      group.className = "law-inline";
+      for (const item of props.options || []) {
+        const { label, value, disabled } = optionValue(item);
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = node.id || "value";
+        input.value = String(value);
+        input.title = String(label);
+        if (props.skin) input.setAttribute("lay-skin", props.skin);
+        if (disabled) input.disabled = true;
+        group.appendChild(input);
+      }
+      control = group;
+      break;
+    }
     case "radio": {
       if (Array.isArray(props.options)) {
         const group = document.createElement("div");
@@ -1089,6 +1194,7 @@ function buildFormControl(node) {
           input.name = node.id || "value";
           input.value = String(value);
           input.title = String(label);
+          if (props.skin) input.setAttribute("lay-skin", props.skin);
           if (disabled) input.disabled = true;
           group.appendChild(input);
         }
@@ -1121,7 +1227,9 @@ function buildFormControl(node) {
 }
 
 function selectControls(node, control) {
-  return node.type === "radio" && control.querySelectorAll ? control.querySelectorAll("input") : control;
+  return (node.type === "radio" || node.type === "checkbox-group") && control.querySelectorAll
+    ? control.querySelectorAll("input")
+    : control;
 }
 
 // layui 2.13.9 resolves a form filter against the document because
@@ -1131,7 +1239,10 @@ function selectControls(node, control) {
 // under document.body works, and moving it back keeps the decorated markup.
 function withDocumentRuntime(el, fn) {
   const root = el.getRootNode();
-  if (!(root instanceof ShadowRoot)) {
+  // A detached node (layui may call `done` before re-inserting the view) has
+  // itself as its root; it still needs to hang under document.body for
+  // document-rooted lookups to find it.
+  if (!(root instanceof ShadowRoot) && root.isConnected) {
     fn();
     return;
   }
@@ -1146,7 +1257,8 @@ function withDocumentRuntime(el, fn) {
     // Restore the exact position, not just the root: the form must stay
     // inside .law-root for layout and theming to apply.
     if (parent) parent.insertBefore(el, next);
-    else root.appendChild(el);
+    else if (root !== el) root.appendChild(el);
+    else el.remove();
     temp.remove();
   }
 }
@@ -1160,8 +1272,12 @@ function rerenderControl(layui, node, control) {
   if (!formEl || !filter) return;
   if (node.type === "select") {
     withDocumentRuntime(formEl, () => layui.form.render("select", filter));
-  } else if (node.type === "checkbox" || node.type === "switch" || node.type === "radio") {
-    const formType = node.type === "switch" ? "switch" : node.type;
+  } else if (
+    ["checkbox", "checkbox-group", "switch", "radio"].includes(node.type)
+  ) {
+    // layui has no "switch" renderer; switch inputs are checkboxes with
+    // `lay-skin="switch"` and are repainted by the checkbox pass.
+    const formType = ["checkbox-group", "switch"].includes(node.type) ? "checkbox" : node.type;
     withDocumentRuntime(formEl, () => layui.form.render(formType, filter));
   }
 }
@@ -1170,6 +1286,14 @@ function writeFormValue(node, control, value, layui) {
   const props = node.props || {};
   const controls = selectControls(node, control);
   const $ = layui.$;
+
+  if (node.type === "checkbox-group") {
+    const wanted = new Set((Array.isArray(value) ? value : []).map(String));
+    $(controls).each(function () {
+      this.checked = wanted.has(String(this.value));
+    });
+    return;
+  }
 
   if (node.type === "select" && props.multiple && Array.isArray(value)) {
     const wanted = value.map((item) => String(item));
@@ -1190,6 +1314,13 @@ function writeFormValue(node, control, value, layui) {
 
 function readFormValue(node, control, layui) {
   const props = node.props || {};
+  if (node.type === "checkbox-group") {
+    const values = [];
+    for (const input of control.querySelectorAll("input")) {
+      if (input.checked) values.push(input.value);
+    }
+    return values;
+  }
   if (node.type === "switch") {
     if (props.checked_value !== undefined || props.value !== undefined) {
       return control.checked ? props.checked_value ?? props.value : props.unchecked_value ?? "";
@@ -1224,14 +1355,24 @@ function bindFormEvents(session, node, control, layui) {
     session.emit(renamed || eventName, node, value, { value });
   };
 
-  if (["select", "checkbox", "switch", "radio"].includes(node.type)) {
-    form.on(`${formType}(${filter})`, (data) => {
+  if (node.type === "select" && props.multiple) {
+    // layui does not fire select events for `lay-ignore` controls.
+    const commit = () => write(layui.$(control).val() || [], "select");
+    session.listen(control, "change", commit);
+    session.listen(control, "input", commit);
+  } else if (
+    ["select", "checkbox", "checkbox-group", "switch", "radio"].includes(node.type)
+  ) {
+    // layui fires `checkbox(filter)` for a checkbox group's inputs too; the
+    // group's value is the list of checked values, not the single clicked one.
+    const eventType = node.type === "checkbox-group" ? "checkbox" : formType;
+    form.on(`${eventType}(${filter})`, (data) => {
       if (node.type === "radio") {
         write(data.value, "radio");
       } else if (node.type === "select" && props.multiple) {
         write(layui.$(control).val() || [], "select");
       } else {
-        write(readFormValue(node, control, layui), formType);
+        write(readFormValue(node, control, layui), eventType);
       }
     });
   } else {
@@ -1253,11 +1394,25 @@ function renderFormNode(session, node, layui, inForm = false) {
   const control = buildFormControl(node);
   control.setAttribute("name", node.id || "value");
   if (node.id) control.setAttribute("lay-filter", session.filterFor(node, 0));
+  // layui reads `lay-filter` from each <input> for radios and checkbox
+  // groups, not from the wrapping <div>.
+  if (
+    (node.type === "radio" || node.type === "checkbox-group") &&
+    control.tagName === "DIV"
+  ) {
+    for (const input of control.querySelectorAll("input")) {
+      input.setAttribute("lay-filter", session.filterFor(node, 0));
+    }
+  }
   const props = node.props || {};
   setAttr(control, "lay-ignore", props.ignore);
   setAttr(control, "lay-verify", props.verify);
   setAttr(control, "lay-reqtext", props.reqtext);
   setAttr(control, "autocomplete", props.autocomplete);
+  // Non-text controls have no shared disabled path in buildFormControl.
+  if (props.disabled && !(control instanceof HTMLInputElement) && control.tagName === "SELECT") {
+    control.disabled = true;
+  }
 
   const wrapper = document.createElement("div");
   // layui's stylesheet hides native selects/checkboxes/radios only inside
@@ -1392,7 +1547,10 @@ function mountNode(session, node, layui, index, inForm = false) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = props.theme ? `layui-btn layui-btn-${props.theme}` : "layui-btn";
-    button.textContent = node.text ?? node.children?.[0] ?? "按钮";
+    applyClass(button, node.class);
+    applyClass(button, props.class_);
+    if (props.html !== undefined) button.innerHTML = String(props.html);
+    else button.textContent = node.text ?? node.children?.[0] ?? "按钮";
     if (node.id) button.setAttribute("data-law-id", node.id);
     setAttr(button, "lay-submit", props["lay-submit"]);
     setAttr(button, "lay-filter", props["lay-filter"]);
@@ -1408,7 +1566,8 @@ function mountNode(session, node, layui, index, inForm = false) {
   const element = document.createElement(node.type);
   for (const [key, raw] of Object.entries(node.props || {})) {
     if (key === "html") element.innerHTML = raw;
-    else setAttr(element, key, raw);
+    else if (key === "style") applyStyle(element, raw);
+    else setAttr(element, key === "class_" ? "class" : key, raw);
   }
   if (node.id) element.setAttribute("data-law-id", node.id);
   applyClass(element, node.class);
@@ -1487,8 +1646,8 @@ async function render({ model, el }) {
 
   let layui;
   try {
-    layui = await ensureRuntime(model.get("config"));
     const root = el.getRootNode();
+    layui = await ensureRuntime(model.get("config"), !(root instanceof ShadowRoot));
     if (root instanceof ShadowRoot) await loadFullStyles(root);
     placeholder.remove();
     session.layui = layui;

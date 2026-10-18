@@ -147,7 +147,10 @@ function renderDatePicker(api) {
   const current = node.model ? session.state[node.model] : undefined;
   const input = document.createElement("input");
   input.className = "layui-input";
-  input.setAttribute("id", api.uid);
+  // layui identifies instances by this id; two datepickers in one widget
+  // would otherwise share `api.uid` and look up the wrong instance.
+  const dateId = `${api.uid}-${node.id || "date"}`;
+  input.setAttribute("id", dateId);
   holder.appendChild(input);
 
   const emit = (value, eventName, raw) => {
@@ -159,17 +162,11 @@ function renderDatePicker(api) {
     session.emit((node.events && node.events[eventName]) || eventName, node, value, raw);
   };
 
-  layui.laydate.render({
+  const options = {
     elem: input,
     type: props.type || "date",
     range: props.range || false,
-    format: props.format || undefined,
-    value: current ?? props.value ?? undefined,
-    min: props.min ?? undefined,
-    max: props.max ?? undefined,
-    theme: props.theme,
     trigger: props.trigger || "click",
-    position: props.position,
     done(value, date, endDate) {
       emit(value, "done", { value, date, endDate });
       session.flush();
@@ -177,14 +174,23 @@ function renderDatePicker(api) {
     change(value) {
       emit(value, "change", { value });
     },
-  });
+  };
+  // `laydate` merges its options with jQuery.extend, so an explicit
+  // `undefined` overwrites the default instead of leaving it in place. It
+  // defaults `min`/`max` to 1900/2099; passing `min: undefined` makes every
+  // day except today unselectable.
+  for (const key of ["format", "value", "min", "max", "theme", "position"]) {
+    const value = key === "value" ? current ?? props.value : props[key];
+    if (value !== undefined && value !== null && value !== "") options[key] = value;
+  }
+  layui.laydate.render(options);
 
   return {
     el: holder,
     update(value) {
       if (value === undefined || value === null) return;
       const laydate = layui.laydate;
-      const inst = laydate.getInst?.(input);
+      const inst = laydate.getInst?.(dateId);
       if (inst) {
         session.applyFromHost(() => inst.setValue(value).done().remove?.());
       } else {
@@ -228,6 +234,29 @@ function renderTable(api) {
       toolbar: props.toolbar,
       title: props.title,
       done(res, curr, count) {
+        // layui renders its checkboxes with `form.render` scoped to the table
+        // view, but that lookup runs from `document`. Inside a shadow root it
+        // finds nothing, leaving the native checkboxes undecorated.
+        // layui inserts the view as a *sibling* after the elem we passed.
+        const view =
+          holder.querySelector(".layui-table-view") ??
+          (holder.nextElementSibling?.classList.contains("layui-table-view")
+            ? holder.nextElementSibling
+            : null);
+        if (!view) return;
+        // `done` re-fires after sort, page and data reloads, and layui has
+        // re-created the raw checkboxes by then, so re-decorate every time.
+        // No filter is passed: a filter turns into a document-rooted
+        // `$('.layui-form[lay-filter=...]')` lookup that cannot see a shadow
+        // root, so the document-wide pass has to do the work while the view
+        // is temporarily attached to document.body.
+        withDocumentRuntime(view, () => {
+          // The filter must be re-read here; layui re-creates the view after
+          // a sort and the new node carries a fresh filter value.
+          const filter = view.getAttribute("lay-filter");
+          if (filter) layui.form.render("checkbox", filter);
+          else layui.form.render("checkbox");
+        });
         registerTableEvents(layui, tableId, filter, node, session);
         if (node.events?.done) session.emit(node.events.done, node, { total: count }, { curr, count });
       },
@@ -293,13 +322,13 @@ function renderTabs(api) {
     title: item.props?.title ?? `Tab ${index + 1}`,
     id: item.id || `tab${index + 1}`,
   }));
-  // Tab bodies use layui's HTML-string mode; nested widgets are rendered to
-  // markup once, so tab content is static in 0.1.
-  const body = items.map((item, index) => {
-    const container = document.createElement("div");
-    if (api.renderChildren) container.appendChild(api.renderChildren(item.children));
-    return { id: item.id || `tab${index + 1}`, content: container.innerHTML };
-  });
+  // Render the tab shells first, then mount the real child nodes into each
+  // body. Passing HTML strings would serialize nested controls and detach
+  // them from the session (no layui decoration, no state binding).
+  const body = items.map((item, index) => ({
+    id: item.id || `tab${index + 1}`,
+    content: "",
+  }));
   const holder = document.createElement("div");
   const activeIndex = Math.max(0, header.findIndex((item) => item.id === current));
 
@@ -312,6 +341,13 @@ function renderTabs(api) {
     trigger: props.trigger || "click",
     headerMode: props.header_mode || "auto",
     closable: Boolean(props.closable),
+  });
+
+  items.forEach((item, index) => {
+    const id = item.id || `tab${index + 1}`;
+    const panel = holder.querySelector(`.layui-tabs-item[lay-id="${id}"]`);
+    if (!panel || !api.renderChildren) return;
+    panel.appendChild(api.renderChildren(item.children));
   });
 
   // layui fires afterChange(<tabs id>) on its global event bus. The payload
@@ -407,10 +443,12 @@ function renderDropdown(api) {
 // --- progress -------------------------------------------------------------
 
 function renderProgress(api) {
-  const { node, session, layui } = api;
+  const { node, session } = api;
   const props = { ...(node.props || {}) };
   const holder = document.createElement("div");
   holder.className = "layui-progress";
+  if (props.class_) holder.classList.add(...String(props.class_).split(/\s+/).filter(Boolean));
+  applyStyle(holder, node.style);
   const valueKey = node.bind?.value;
   const read = () => {
     const value = valueKey ? session.state[valueKey] : props.value;
@@ -438,11 +476,14 @@ function renderProgress(api) {
 // --- collapse -------------------------------------------------------------
 
 function renderCollapse(api) {
-  const { node, session, layui } = api;
+  const { node, layui } = api;
   const props = { ...(node.props || {}) };
   const holder = document.createElement("div");
   holder.className = "layui-collapse";
   if (props.accordion) holder.setAttribute("lay-accordion", "");
+  if (props["lay-filter"] || node.id) {
+    holder.setAttribute("lay-filter", props["lay-filter"] || node.id);
+  }
 
   for (const item of node.children || []) {
     if (!item || item.type !== "collapse-item") continue;
@@ -452,7 +493,11 @@ function renderCollapse(api) {
     titleEl.className = "layui-colla-title";
     titleEl.textContent = item.props?.title || "";
     const contentEl = document.createElement("div");
-    contentEl.className = "layui-colla-content" + (item.props?.open ? " layui-show" : "");
+    // layui reads the initial state from the inline `display` value
+    // (`"none"` means collapsed) and then drops `layui-show`, so an open
+    // item must start with `display: block`.
+    contentEl.className = "layui-colla-content";
+    contentEl.style.display = item.props?.open ? "block" : "none";
     const body = api.renderChildren ? api.renderChildren(item.children) : null;
     if (body) contentEl.appendChild(body);
     itemEl.appendChild(titleEl);
@@ -460,8 +505,9 @@ function renderCollapse(api) {
     holder.appendChild(itemEl);
   }
 
+  // layui resolves `elem` through jQuery and its click handler is bound
+  // synchronously, so an element argument does not need document scope.
   layui.collapse.render({ elem: layui.$(holder) });
-  layui.element.render("collapse", layui.$(holder));
   return { el: holder };
 }
 
@@ -520,6 +566,7 @@ function renderBreadcrumb(api) {
   const props = { ...(node.props || {}) };
   const holder = document.createElement("span");
   holder.className = "layui-breadcrumb";
+  if (props["lay-separator"]) holder.setAttribute("lay-separator", props["lay-separator"]);
   for (const item of props.items || []) {
     const link = document.createElement("a");
     link.href = item.href || "javascript:;";
@@ -565,12 +612,10 @@ function renderCarousel(api) {
     anim: props.anim || "",
     trigger: props.trigger || "click",
     index: typeof current === "number" ? current : 0,
-  });
-
-  layui.element.on(`carousel(${api.filter})`, () => {});
-  instance.on?.("change", (data) => {
-    if (node.model) session.setValue(node.model, data.index);
-    session.emit((node.events && node.events.change) || "change", node, data.index, plainData(data));
+    change(data) {
+      if (node.model) session.setValue(node.model, data.index);
+      session.emit((node.events && node.events.change) || "change", node, data.index, plainData(data));
+    },
   });
 
   return { el: holder };
@@ -582,25 +627,46 @@ function renderLaypage(api) {
   const { node, session, layui } = api;
   const props = { ...(node.props || {}) };
   const holder = document.createElement("div");
-  const curr = node.bind?.curr ? session.state[node.bind.curr] : props.curr ?? 1;
-  const instance = layui.laypage.render({
-    elem: holder,
-    count: props.count ?? props.total ?? 0,
-    limit: props.limit ?? 10,
-    limits: props.limits,
-    curr: curr ?? 1,
-    layout: props.layout || ["prev", "page", "next", "skip", "count", "limit"],
-    jump(obj, first) {
-      if (first) return;
-      const key = node.updates?.change || node.updates?.page;
-      if (key) session.setValue(key, obj.curr);
-      session.emit((node.events && node.events.change) || "change", node, obj.curr, plainData(obj));
-    },
-  });
+  const read = () => {
+    const value = node.bind?.curr ? session.state[node.bind.curr] : props.curr;
+    return Number(value) || 1;
+  };
+  let curr = read();
+  let rendered = false;
+
+  const show = (page) => {
+    curr = page;
+    holder.innerHTML = "";
+    layui.laypage.render({
+      elem: holder,
+      count: props.count ?? props.total ?? 0,
+      limit: props.limit ?? 10,
+      limits: props.limits,
+      curr: page,
+      layout: props.layout || ["prev", "page", "next", "skip", "count", "limit"],
+      jump(obj, first) {
+        if (first) return;
+        const key = node.updates?.change || node.updates?.page;
+        if (key) session.setValue(key, obj.curr);
+        session.emit((node.events && node.events.change) || "change", node, obj.curr, plainData(obj));
+      },
+    });
+    rendered = true;
+  };
+
   return {
     el: holder,
+    afterMount() {
+      // laypage re-finds its own view with `document.getElementById`, which
+      // cannot see nodes inside a shadow root; it therefore binds no click
+      // handlers there. Render while the holder is temporarily attached to
+      // document.body, then move it back with the handlers in place.
+      withDocumentRuntime(holder, () => show(curr));
+    },
     update(value) {
-      instance?.config && (instance.config.curr = value);
+      if (!rendered || value === undefined || value === null) return;
+      if (Number(value) === curr) return;
+      withDocumentRuntime(holder, () => show(Number(value) || 1));
     },
   };
 }

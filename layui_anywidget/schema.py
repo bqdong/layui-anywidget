@@ -352,18 +352,10 @@ def checkbox_group(
 ) -> Node:
     """Build a group of checkboxes bound to ``state[key]`` as a list."""
 
-    items: list[Node] = []
-    for item in options(values):
-        items.append(
-            node(
-                "checkbox",
-                id=f"{key}-{item['value']}",
-                value=item["value"],
-                props={"title": item["label"], "group": key},
-            )
-        )
+    props = dict(props)
+    props["options"] = options(values)
     return field(
-        node("div", *items, props={"group_model": key, "options": options(values), **props}),
+        node("checkbox-group", id=key, model=key, props=props),
         label=label,
     )
 
@@ -415,16 +407,32 @@ def button(
     *,
     id: str | None = None,
     theme: str | None = None,
-    events: Mapping[str, str] | Sequence[str] | str | None = None,
+    class_: str | Sequence[str] | None = None,
+    events: Mapping[str, str] | str | None = None,
+    html: str | None = None,
     **props: Any,
 ) -> Node:
-    """Build a layui button. Clicks are forwarded by default."""
+    """Build a layui button. Clicks are forwarded by default.
+
+    ``events`` is a name or mapping; click payloads reach Python through
+    ``Layui.on_event`` (or the ``Button`` control's ``on_click``). Pass
+    ``html`` for icon markup such as
+    ``'<i class="layui-icon layui-icon-edit"></i>'``; it replaces the label.
+    """
 
     event_map = _event_map(events) or {}
+    if not isinstance(events, Mapping):
+        # A sequence would be split into per-character event names; only a
+        # single event string makes sense for a button.
+        event_map = {"click": events} if events else {}
     event_map.setdefault("click", "click")
     props = dict(props)
     if theme is not None:
         props["theme"] = theme
+    if class_ is not None:
+        props["class_"] = class_
+    if html is not None:
+        props["html"] = html
     return node("button", label_text, id=id, events=event_map, class_="layui-btn", props=props)
 
 
@@ -628,6 +636,7 @@ def dropdown(
     *,
     trigger_event: str = "click",
     events: Mapping[str, str] | Sequence[str] | str | None = None,
+    updates: Mapping[str, str] | None = None,
     **props: Any,
 ) -> Node:
     """Build a dropdown menu.
@@ -640,8 +649,13 @@ def dropdown(
     for item in items:
         if isinstance(item, str):
             normalized.append({"title": item, "id": item})
-        else:
-            normalized.append(dict(item))
+            continue
+        entry = dict(item)
+        # layui marks a separator with the literal type "-" and ignores
+        # entries whose type it does not know (they render as normal items).
+        if entry.get("type") == "divider":
+            entry = {"type": "-"}
+        normalized.append(entry)
     trigger_node = (
         trigger
         if isinstance(trigger, dict)
@@ -649,7 +663,14 @@ def dropdown(
     )
     event_map = _event_map(events) or {"click": "click"}
     props = {**props, "data": normalized, "trigger": trigger_event}
-    return node("dropdown", trigger_node, id=props.pop("id", None), events=event_map, props=props)
+    return node(
+        "dropdown",
+        trigger_node,
+        id=props.pop("id", None),
+        events=event_map,
+        updates=updates,
+        props=props,
+    )
 
 
 def menu(items: Iterable[Any], *, model: str | None = None, **props: Any) -> Node:
@@ -703,33 +724,84 @@ def laypage(total: int, *, page_key: str | None = None, limit: int = 10, **props
 # ---------------------------------------------------------------------------
 
 
-def div(*children: Any, **props: Any) -> Node:
-    return node("div", *children, props=props)
+def div(
+    *children: Any,
+    class_: str | Sequence[str] | None = None,
+    style: Mapping[str, Any] | str | None = None,
+    **props: Any,
+) -> Node:
+    return node("div", *children, class_=class_, style=style, props=props)
 
 
-def span(*children: Any, **props: Any) -> Node:
-    return node("span", *children, props=props)
+def span(
+    *children: Any,
+    class_: str | Sequence[str] | None = None,
+    style: Mapping[str, Any] | str | None = None,
+    **props: Any,
+) -> Node:
+    return node("span", *children, class_=class_, style=style, props=props)
 
 
-def row(*children: Any, gap: str | None = None, **props: Any) -> Node:
+def row(
+    *children: Any,
+    gap: int | str | None = None,
+    class_: str | Sequence[str] | None = None,
+    **props: Any,
+) -> Node:
+    """A ``layui-row`` grid row.
+
+    Args:
+        gap: Column gutter shorthand: ``15`` or ``"15"`` becomes
+            ``layui-col-space15``.
+    """
+
+    classes = ["layui-row"]
     if gap is not None:
-        props["gap"] = gap
-    return node("div", *children, class_="layui-row", props=props)
+        classes.append(f"layui-col-space{gap}")
+    if class_:
+        classes.append(class_ if isinstance(class_, str) else " ".join(class_))
+    return node("div", *children, class_=" ".join(classes), props=props)
 
 
-def col(*children: Any, span: int | None = None, **props: Any) -> Node:
-    class_ = "layui-col"
+def col(
+    *children: Any,
+    span: int | None = None,
+    xs: int | None = None,
+    sm: int | None = None,
+    md: int | None = None,
+    lg: int | None = None,
+    xl: int | None = None,
+    offset: int | None = None,
+    class_: str | Sequence[str] | None = None,
+    **props: Any,
+) -> Node:
+    """A grid column.
+
+    Args:
+        span: Shorthand for ``md`` (the common desktop size).
+        xs, sm, md, lg, xl: Columns out of 12 at each breakpoint.
+        offset: Left offset in columns at the ``md`` breakpoint.
+    """
+
+    sizes = {"xs": xs, "sm": sm, "md": md, "lg": lg, "xl": xl}
     if span is not None:
-        class_ = f"layui-col-md{span}"
-    return node("div", *children, class_=class_, props=props)
+        sizes["md"] = span
+    classes = [f"layui-col-{name}{value}" for name, value in sizes.items() if value is not None]
+    if offset is not None:
+        classes.append(f"layui-col-md-offset{offset}")
+    if not classes:
+        classes.append("layui-col")
+    if class_:
+        classes.append(class_ if isinstance(class_, str) else " ".join(class_))
+    return node("div", *children, class_=" ".join(classes), props=props)
 
 
-def text(value: Any, tag: str = "span", **props: Any) -> Node:
-    return node("text", text=value, props={"tag": tag, **props})
+def text(value: Any, tag: str = "span", *, class_: Any = None, **props: Any) -> Node:
+    return node("text", text=value, class_=class_, props={"tag": tag, **props})
 
 
-def title(value: Any, level: int = 1, **props: Any) -> Node:
-    return node("text", text=value, props={"tag": f"h{level}", **props})
+def title(value: Any, level: int = 1, *, class_: Any = None, **props: Any) -> Node:
+    return node("text", text=value, class_=class_, props={"tag": f"h{level}", **props})
 
 
 def hr() -> Node:
