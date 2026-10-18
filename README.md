@@ -150,6 +150,15 @@ are marimo apps:
 marimo run demos/form.py
 ```
 
+`demos/components/` has one demo per layui component, laid out like the layui
+2.x documentation pages (title, intro quote, a section per feature, and the
+live Python-side state underneath). Start with the index:
+
+```bash
+just demo-components          # pick any page
+just demo-component layout    # one page, e.g. the grid demo
+```
+
 ## Development
 
 The project is managed with [uv](https://docs.astral.sh/uv/) (Python), a

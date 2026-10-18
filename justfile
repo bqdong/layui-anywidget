@@ -89,6 +89,18 @@ demo:
 demo-controls:
     uv run marimo run --no-sandbox demos/controls.py
 
+# Run the gallery of every supported layui component with live state values.
+demo-gallery:
+    uv run marimo run --no-sandbox demos/gallery.py
+
+# List the per-component demos (each follows the layui docs page layout).
+demo-components:
+    uv run marimo run --no-sandbox demos/components/
+
+# Run one per-component demo, e.g. `just demo-component button`.
+demo-component name:
+    uv run marimo run --no-sandbox demos/components/{{name}}.py
+
 # Edit the generic-container demo in the project venv.
 edit:
     uv run marimo edit --no-sandbox demos/form.py
