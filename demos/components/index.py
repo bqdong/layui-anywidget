@@ -35,8 +35,10 @@ def cell_index(mo):
     ]
     blocks = []
     for title, names in groups:
+        # marimo serves a directory as a single-page app: every page is
+        # `?file=<name>.py` on the server root, not a path next to this file.
         items = "\n".join(
-            f"- [`{name}.py`](./{name}.py) · 运行："
+            f"- [`{name}.py`](?file={name}.py) · 运行："
             f"`uv run marimo run --no-sandbox demos/components/{name}.py`"
             for name in names
         )
